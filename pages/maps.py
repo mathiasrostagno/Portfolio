@@ -1,15 +1,16 @@
 import streamlit as st
 import pandas as pd
 import datetime as dt
+from datetime import date, timedelta
 import folium
 import numpy as np
 import pydeck as pdk
 
-end_date = dt.date(2022,9,11)
+end_date = date.today() - timedelta(days=1)
 start_date = dt.date(2020,1,1)
 
 
-def inputs(data):
+def inputs():
     st.sidebar.header('Maps')
     choice = st.sidebar.radio(
         "What to display ?", ('Total cases', 'Total deaths', 'Total fully vaccinated'))
@@ -22,9 +23,10 @@ def inputs(data):
 
 @st.cache
 def get_data():
-    data = pd.read_csv(r'C:\Users\mathi\PycharmProjects\pythonProject2\owid-covid-data.csv')
+    url = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
+    data = pd.read_csv(url)
     data['date'] = pd.to_datetime(data['date']).dt.date
-    loc = pd.read_csv(r'C:\Users\mathi\PycharmProjects\pythonProject2\world_country_and_usa_states_latitude_and_longitude_values.csv',
+    loc = pd.read_csv('world_country_and_usa_states_latitude_and_longitude_values.csv',
                       usecols=('country_code','latitude','longitude','country'))
     return data, loc
 
@@ -32,22 +34,26 @@ def get_data():
 def main():
 
     data, loc = get_data()
-    choice, date = inputs(data)
+    choice, date = inputs()
 
     merged_data = data.merge(loc, how='inner', left_on='location', right_on='country')
     dateselec = (merged_data['date'] == date)
     selection = merged_data.loc[dateselec].fillna(0).drop(columns=['tests_units'])
+    selection['total_deaths_radius'] = selection['total_deaths']*2
+    selection['total_cases_radius'] = selection['total_cases']/15
+    selection['people_fully_vaccinated_per_hundred_radius'] = selection['people_fully_vaccinated_per_hundred'] *6000
 
+    st.write(selection)
 
     if choice == 'Total deaths':
 
 
         layer = pdk.Layer(
                     'ScatterplotLayer',
-                    data=selection[['longitude', 'latitude', 'total_deaths']],
+                    data=selection[['longitude', 'latitude', 'total_deaths_radius']],
                     get_position=['longitude', 'latitude'],
                     get_color='[200, 30, 0, 160]',
-                    get_radius='total_deaths',
+                    get_radius='total_deaths_radius',
                     get_line_color=[0, 0, 255],
                     )
         view_state = pdk.ViewState(latitude=45,
@@ -64,10 +70,10 @@ def main():
 
         layer = pdk.Layer(
             'ScatterplotLayer',
-            data=selection[['longitude', 'latitude', 'total_cases']],
+            data=selection[['longitude', 'latitude', 'total_cases_radius']],
             get_position=['longitude', 'latitude'],
             get_color='[200, 30, 0, 160]',
-            get_radius='total_cases',
+            get_radius='total_cases_radius',
             get_line_color=[0, 0, 255],
         )
         view_state = pdk.ViewState(latitude=45,
@@ -82,10 +88,10 @@ def main():
     if choice == 'Total fully vaccinated':
         layer = pdk.Layer(
             'ScatterplotLayer',
-            data=selection[['longitude', 'latitude', 'people_fully_vaccinated_per_hundred']],
+            data=selection[['longitude', 'latitude', 'people_fully_vaccinated_per_hundred_radius']],
             get_position=['longitude', 'latitude'],
             get_color='[200, 30, 0, 160]',
-            get_radius='people_fully_vaccinated_per_hundred'*500,
+            get_radius='people_fully_vaccinated_per_hundred_radius',
             get_line_color=[0, 0, 255],
         )
         view_state = pdk.ViewState(latitude=45,

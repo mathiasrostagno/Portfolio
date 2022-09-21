@@ -20,7 +20,7 @@ def inputs(data):
     RAW = st.sidebar.checkbox('Display RAW Data')
     groupby_column = st.sidebar.selectbox(
         'Question',
-        ('Is Mortality higher for people older than 65 ?', 'Is Mortality higher for people older than 70 ?', 'Do Gross Domestic Product (GDP) per Capita has an influence ?')
+        ('Check correlation between Mortality and proportion of people older than 65 ?', 'Check correlation between Mortality and proportion of people older than 70 ?', 'Do Gross Domestic Product (GDP) per Capita has an influence ?')
             )
     pays = st.sidebar.multiselect(
         "Select countries", list(pd.unique(data['location'])
@@ -49,7 +49,7 @@ if RAW:
     st.write(data)
 
 if generate:
-    if groupby_column == 'Is Mortality higher for people older than 65 ?':
+    if groupby_column == 'Check correlation between Mortality and proportion of people older than 65 ?':
         fig = px.bar(
              paysselect,
              x=pays,
@@ -57,13 +57,13 @@ if generate:
              color='aged_65_older',
              color_continuous_scale=['green', 'yellow', 'red'],
              template='plotly_white',
-             title=f'<b> Is Mortality higher for people older than 65 ? </b>',
+             title=f'<b> Check correlation between Mortality and proportion of people older than 65 ? </b>',
              labels={'x': 'country', 'total_deaths_per_million': 'Death / Million', 'aged_65_older': 'Population > 65 (%)'}
                   )
 
         st.plotly_chart(fig)
 
-    elif groupby_column == 'Is Mortality higher for people older than 70 ?':
+    elif groupby_column == 'Check correlation between Mortality and proportion of people older than 70 ?':
         fig = px.bar(
             paysselect,
             x=pays,
@@ -71,7 +71,7 @@ if generate:
             color='aged_70_older',
             color_continuous_scale=['green', 'yellow', 'red'],
             template='plotly_white',
-            title=f'<b> Is Mortality higher for people older than 70 ? </b>',
+            title=f'<b> Check correlation between Mortality and proportion of people older than 70 ? </b>',
             labels={'x': 'country', 'total_deaths_per_million': 'Death / Million',
                     'aged_70_older': 'Population > 70 (%)'}
         )
@@ -99,7 +99,7 @@ if generate:
 if top10:
     data_grouped_sorted = dateselect.sort_values('total_deaths_per_million', ascending=False).head(10)
 
-    if groupby_column == 'Is Mortality higher for people older than 65 ?':
+    if groupby_column == 'Check correlation between Mortality and proportion of people older than 65 ?':
         fig = px.bar(
              data_grouped_sorted,
              x='location',
@@ -107,13 +107,13 @@ if top10:
              color='aged_65_older',
              color_continuous_scale=['green', 'yellow', 'red'],
              template='plotly_white',
-             title=f'<b> Is Mortality higher for people older than 65 ? </b>',
+             title=f'<b> Check correlation between Mortality and proportion of people older than 65 ? (Top 10) </b>',
              labels={'location': 'country', 'total_deaths_per_million': 'Death / Million', 'aged_65_older': 'Population > 65 (%)'}
                   )
 
         st.plotly_chart(fig)
 
-    elif groupby_column == 'Is Mortality higher for people older than 70 ?':
+    elif groupby_column == 'Check correlation between Mortality and proportion of people older than 70 ?':
         fig = px.bar(
             data_grouped_sorted,
             x='location',
@@ -121,7 +121,7 @@ if top10:
             color='aged_70_older',
             color_continuous_scale=['green', 'yellow', 'red'],
             template='plotly_white',
-            title=f'<b> Is Mortality higher for people older than 70 ? </b>',
+            title=f'<b> Check correlation between Mortality and proportion of people older than 70 ? (Top 10) </b>',
             labels={'location': 'country', 'total_deaths_per_million': 'Death / Million',
                 'aged_70_older': 'Population > 70 (%)'}
                 )

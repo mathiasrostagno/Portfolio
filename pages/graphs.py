@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import datetime as dt
 from datetime import date, timedelta
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 end_date = date.today() - timedelta(days=1)  #penser à remplacer à today en mettant l'url du csv (datetime.today.date() )
 start_date = dt.date(2020,1,1)

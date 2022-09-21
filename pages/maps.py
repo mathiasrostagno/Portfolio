@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import datetime as dt
 from datetime import date, timedelta
-import folium
-import numpy as np
 import pydeck as pdk
 
 end_date = date.today() - timedelta(days=1)

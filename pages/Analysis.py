@@ -17,7 +17,7 @@ def get_data():
 
 def inputs(data):
     st.sidebar.header('Analysis')
-
+    RAW = st.sidebar.checkbox('Display RAW Data')
     groupby_column = st.sidebar.selectbox(
         'Question',
         ('Is Mortality higher for people older than 65 ?', 'Is Mortality higher for people older than 70 ?', 'Do Gross Domestic Product (GDP) per Capita has an influence ?')
@@ -29,11 +29,11 @@ def inputs(data):
     st.sidebar.write('OR')
     top10 = st.sidebar.button('Display top 10')
 
-    return groupby_column, pays, generate, top10
+    return groupby_column, pays, generate, top10, RAW
 
 
 data = get_data()
-groupby_column, pays, generate, top10 = inputs(data)
+groupby_column, pays, generate, top10, RAW = inputs(data)
 pays.sort()
 
 output_columns = ['location', 'total_deaths_per_million', 'aged_65_older', 'aged_70_older', 'gdp_per_capita']
@@ -44,6 +44,9 @@ paysselect = dateselect[pd.DataFrame(dateselect.location.tolist()).isin(pays).an
 
 #data_grouped = data_today.groupby(by=[pays], as_index=False)[output_columns].mean()
 #data_grouped_sorted = data_grouped.sort_values('total_deaths_per_million', ascending=False)
+
+if RAW:
+    st.write(data)
 
 if generate:
     if groupby_column == 'Is Mortality higher for people older than 65 ?':

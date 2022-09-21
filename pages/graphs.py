@@ -10,6 +10,7 @@ start_date = dt.date(2020,1,1)
 
 def inputs(data):
     st.sidebar.header('Graphs')
+    RAW = st.sidebar.checkbox('Display RAW Data')
     pays = st.sidebar.multiselect(
         "Pays/Region", list(pd.unique(data['location'])
                          ))
@@ -18,7 +19,7 @@ def inputs(data):
     casmillion = st.sidebar.button('Cases per million')
     reproduction = st.sidebar.button('Reproduction rate')
     vaccination = st.sidebar.button('Vaccination')
-    return pays, start, end, casmillion, reproduction, vaccination
+    return pays, start, end, casmillion, reproduction, vaccination, RAW
 
 @st.cache
 def get_data():
@@ -31,9 +32,10 @@ def get_data():
 
 
 data = get_data()
-pays, start, end, casmillion, reproduction, vaccination = inputs(data)
-st.write(data)
+pays, start, end, casmillion, reproduction, vaccination, RAW = inputs(data)
 
+if RAW:
+    st.write(data)
 
 if casmillion :
 

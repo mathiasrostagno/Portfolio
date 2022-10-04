@@ -16,4 +16,4 @@ with st.sidebar:
 
 st.sidebar.write('📧: mathias.rostagno@gmail.com')
 pdfFile = open('data/Mathias_Rostagno_Resume.PDF', 'rb')
-st.sidebar.download_button('download resume', pdfFile, file_name='Mathias_Rostagno_Resume.PDF',mime='pdf')
+st.sidebar.download_button('download resume',pdfFile,file_name='Mathias_Rostagno_Resume.PDF',mime='pdf')

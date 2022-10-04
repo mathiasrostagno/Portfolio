@@ -15,12 +15,14 @@ def inputs():
         "What to display ?", ('Total cases', 'Total deaths', 'Total fully vaccinated'))
 
     date = st.sidebar.slider('Date', min_value=start_date, max_value=end_date)
-
+    #casmillion = st.sidebar.button('Cases per million')
+    #reproduction = st.sidebar.button('Reproduction rate')
+    #vaccination = st.sidebar.button('Vaccination')
     return choice, date, RAW
 
 @st.cache
 def get_data():
-    url = "data/owid-covid-data.csv"
+    url = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
     data = pd.read_csv(url)
     data['date'] = pd.to_datetime(data['date']).dt.date
     loc = pd.read_csv('data/world_country_and_usa_states_latitude_and_longitude_values.csv',
@@ -102,6 +104,5 @@ if choice == 'Total fully vaccinated':
     ))
 
 
-st.write("Date selected : ", date)
-st.write(selection[['location', 'total_cases', 'total_deaths', 'people_fully_vaccinated_per_hundred']])
+st.write(selection)
 

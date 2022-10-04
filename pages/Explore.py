@@ -3,39 +3,43 @@ import pandas as pd
 import datetime as dt
 from datetime import date, timedelta
 
-end_date = date.today() - timedelta(days=1)  #penser à remplacer à today en mettant l'url du csv (datetime.today.date() )
+end_date = date.today() - timedelta(days=1)
 start_date = dt.date(2020,1,1)
 
+@st.cache
+def get_data():
+    url = "data/owid-covid-data.csv"
+    data = pd.read_csv(url)
+    data['date'] = pd.to_datetime(data['date']).dt.date
+
+    return data
+
 def inputs(data):
-    st.sidebar.header('Graphs')
+    st.sidebar.header('Explore')
     RAW = st.sidebar.checkbox('Display RAW Data')
     pays = st.sidebar.multiselect(
-        "Pays/Region", list(pd.unique(data['location'])
-                         ))
+        "Select countries", list(pd.unique(data['location'])
+                                 ))
     start = st.sidebar.date_input('Starting Date', start_date)
     end = st.sidebar.date_input('Final Date', end_date)
     casmillion = st.sidebar.button('Cases per million')
     reproduction = st.sidebar.button('Reproduction rate')
     vaccination = st.sidebar.button('Vaccination')
-    return pays, start, end, casmillion, reproduction, vaccination, RAW
 
-@st.cache
-def get_data():
-    url = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
-    data = pd.read_csv(url)
-    data['date'] = pd.to_datetime(data['date']).dt.date
-    return data
-
-
-
+    return pays, RAW, start, end, casmillion, reproduction, vaccination
 
 data = get_data()
-pays, start, end, casmillion, reproduction, vaccination, RAW = inputs(data)
+pays, RAW, start, end, casmillion, reproduction, vaccination = inputs(data)
+pays.sort()
+
+output_columns = ['location', 'total_deaths_per_million', 'aged_65_older', 'aged_70_older', 'gdp_per_capita']
+dateselect = data[data['date'] == end_date]
+paysselect = dateselect[pd.DataFrame(dateselect.location.tolist()).isin(pays).any(1).values][output_columns]
 
 if RAW:
     st.write(data)
 
-if casmillion :
+if casmillion:
 
     st.header(f'Cases per million for  : ')
     st.subheader(f', '.join(pays))

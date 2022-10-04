@@ -1,0 +1,31 @@
+{"events": [
+		{"start_date":
+			{"year":"2019",
+			 "month":"11",
+			 "day":"17"
+			},
+		 "media":
+			{"url":"file://localhost/output/FR.png",
+			 "credit":"Tata 1mg"
+			},
+		 "text":
+			{"headline":"First confirmed case of Coronavirus 19 in the city of Wuhan",
+			 "text":"Government records suggest first person infected with new disease may have been a Hubei resident aged 55, but ‘patient zero’ has yet to be confirmed"
+			}
+		},
+
+		{"start_date": 
+			{"year": "2018", 
+			 "month": "6"
+			},
+		 "media": 
+			{"url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_9io7Zmn_xunW5wZynIwqHOufi9Rh51pcxQ&usqp=CAU", 
+			 "credit": "Datacamp"
+			}, 
+		 "text": 
+			{"headline": "My Introduction to Data Science", 
+			 "text": "<p>This was the time I started off with the DataCamp's Data Scientist Career Track. It had nearly 22 modules which I took 2 months to complete<p>"
+			}
+		}
+		]
+}
